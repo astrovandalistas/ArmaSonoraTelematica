@@ -34,12 +34,18 @@ char inString[32]; // string for incoming serial data
 int stringPos = 0; // string index counter
 boolean startRead = false; // is reading?
 
-int relay1 = 7;
-int relay2 = 8;
+int relay1 = 6;
+int relay2 = 7;
+
+IPAddress ip(192,168,2,33);
+IPAddress adns(192,168,2,2);
+IPAddress gateway(192,168,2,254);
+IPAddress subnetmask(255,255,255,0);
+
 
 void setup(){
 
-  Ethernet.begin(mac);
+  Ethernet.begin(mac, ip, adns, gateway, subnetmask);
   Serial.begin(9600);
   pinMode(relay1,OUTPUT);
   pinMode(relay2,OUTPUT);
@@ -52,6 +58,7 @@ void setup(){
 void loop(){
 
   if(connectAndCheck()) {
+    //Serial.print("doit");
     rutinaRelays();
   }
 
@@ -62,13 +69,43 @@ void loop(){
 
 void rutinaRelays(){
   digitalWrite(relay1,HIGH);
-  delay(1000);
+  delay(600);
   digitalWrite(relay1,LOW);
-  delay(1000);
+  delay(800);
   digitalWrite(relay2,HIGH);
-  delay(1000);
+  delay(600);
   digitalWrite(relay2,LOW);
-  delay(1000);
+  delay(800);
+
+  digitalWrite(relay1,HIGH);
+  delay(600);
+  digitalWrite(relay1,LOW);
+  delay(800);
+  digitalWrite(relay2,HIGH);
+  delay(600);
+  digitalWrite(relay2,LOW);
+  delay(800);
+  
+  digitalWrite(relay1,HIGH);
+  delay(600);
+  digitalWrite(relay1,LOW);
+  delay(800);
+  digitalWrite(relay2,HIGH);
+  delay(600);
+  digitalWrite(relay2,LOW);
+  
+  
+  delay(2500);
+
+  digitalWrite(relay2,HIGH);
+  delay(600);
+  digitalWrite(relay2,LOW);
+  delay(800);
+  
+  digitalWrite(relay1,HIGH);
+  delay(600);
+  digitalWrite(relay1,LOW);
+  delay(800);
   
 }
 
@@ -76,11 +113,11 @@ void rutinaRelays(){
 boolean connectAndCheck(){
   //connect to the server
 
-  Serial.println("connecting...");
+//  Serial.println("connecting...");
 
   //port 80 is typical of a www page
   if (client.connect(server, 80)) {
-    Serial.println("connected");
+//    Serial.println("connected");
     client.print("GET ");
     client.println(location);
     client.println();
@@ -115,7 +152,7 @@ boolean checkBang(){
 
     if (client.available()) {
       char c = client.read();
-//Serial.print(c);
+Serial.print(c);
       if (c == '[' ) { //'<' is our begining character
         startRead = true; //Ready to start reading the part 
       }
@@ -136,8 +173,8 @@ boolean checkBang(){
               if(c=='1'){
 
                 bang = true;
-                Serial.println("nuevo");
-              } else { bang = false; Serial.println("viejo"); }
+              //  Serial.println("nuevo");
+              } else { bang = false; } //Serial.println("viejo"); }
             }
             if(leerParametro==1){              
               tweet[stringPos] = c;
@@ -153,20 +190,20 @@ boolean checkBang(){
           startRead = false;
           client.stop();
           client.flush();
-          Serial.println("disconnecting.");
+         // Serial.println("disconnecting.");
 
           
           // SETTEAR BANG!
-          Serial.println(autor);
+         // Serial.println(autor);
           //Serial.println(tweet);
-          Serial.println(strcmp(autor,ultimoAutor));
-          Serial.println(autor);
-          Serial.println(ultimoAutor);
+          //Serial.println(strcmp(autor,ultimoAutor));
+          //Serial.println(autor);
+          //Serial.println(ultimoAutor);
           
           if(!strcmp(autor,ultimoAutor)){
           
             if(strcmp(tweet,ultimoTweet)){
-              Serial.println("bang");
+             // Serial.println("bang");
               memcpy(ultimoAutor,autor,144);
               memcpy(ultimoTweet,tweet,144);
               return true;
@@ -180,7 +217,7 @@ boolean checkBang(){
           if(!strcmp(tweet,ultimoTweet)){
           
             if(strcmp(autor,ultimoAutor)){
-              Serial.println("bang");
+              //Serial.println("bang");
               memcpy(ultimoAutor,autor,144);
               memcpy(ultimoTweet,tweet,144);
               return true;
@@ -192,12 +229,12 @@ boolean checkBang(){
           }
           
           if(strcmp(autor,ultimoAutor)&&strcmp(tweet,ultimoTweet)&&bang) {
-            Serial.println("bang");
+            //Serial.println("bang");
             memcpy(ultimoAutor,autor,144);
             memcpy(ultimoTweet,tweet,144);
             return true;
           } else {
-            Serial.println("dont bang");
+            //Serial.println("dont bang");
             return false;
           }
           
