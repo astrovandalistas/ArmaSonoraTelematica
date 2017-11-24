@@ -14,12 +14,12 @@
         $now = strtotime($nows_date); 
         $tweetdate=date('n/j/y g:i a',$time);
 
-    	if( $now - $time < 30 ) {
-		    echo "[{1}{".$tweet["text"]."}{".$tweet["from_user_name"]."}]";
-	    } else {
-		    echo "[{0}{".$tweet["text"]."}{".$tweet["from_user_name"]."}]";
-	    }
+        if( $now - $time < 30 ) {
+            echo "[{1}{".$tweet["text"]."}{".$tweet["from_user_name"]."}]";
+        } else {
+            echo "[{0}{".$tweet["text"]."}{".$tweet["from_user_name"]."}]";
+        }
         $id = $entry->id;
         echo $text; echo "  "; echo $author;
-	}
+    }
 ?>
