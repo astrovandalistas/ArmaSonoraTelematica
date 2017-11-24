@@ -1,12 +1,12 @@
 <?php
     //initialize a new curl resource
-	$url = "http://search.twitter.com/search.json?rpp=1000&q=BangCampoMarte";
+    $url = "http://search.twitter.com/search.json?rpp=1000&q=BangCampoMarte";
     $contents = file_get_contents($url);
     $results = json_decode($contents, true);
 
-	if($results === FALSE) {
+    if($results === FALSE) {
         //Content couldn't be retrieved... Do something
-	} else {	
+    } else {	
         $tweet = $results["results"][0];
         $time = strtotime($tweet["created_at"]);
 
